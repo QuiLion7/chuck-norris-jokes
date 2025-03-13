@@ -124,3 +124,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .h-minus-72 {
+    min-height: calc(100vh - 72px);
+  }
+
+  .h-minus-156 {
+    min-height: calc(100vh - 156px);
+  }
+
+  .h-minus-230 {
+    height: calc(100vh - 230px);
+  }
+}
