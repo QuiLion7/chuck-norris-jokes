@@ -25,25 +25,25 @@ export default function Footer() {
   };
 
   return (
-    <footer className="border-t bg-background/95 h-18 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-4 mt-4 relative z-10">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-3">
+    <footer className="border-t bg-background/95 h-full backdrop-blur supports-[backdrop-filter]:bg-background/60 relative z-10">
+      <div className="container mx-auto px-4 h-auto">
+        <div className="flex my-4 flex-col md:flex-row justify-between items-center gap-2">
           <div className="flex items-center gap-2">
             <motion.div
               whileHover={{ rotate: [0, -10, 10, -10, 0] }}
               transition={{ duration: 0.5 }}
             >
-              <span className="text-xl sm:text-2xl">🤠</span>
+              <span className="text-xl md:text-2xl">🤠</span>
             </motion.div>
-            <p className="text-xs sm:text-sm text-muted-foreground">
+            <p className="text-xs md:text-sm text-muted-foreground">
               {footerContent.tagline}
             </p>
           </div>
 
-          <div className="flex gap-4 items-center md:items-end gap-1 mt-2 md:mt-0">
-            <div className="text-xs sm:text-sm font-medium">
+          <div className="flex gap-4 items-center md:items-end mt-2 md:mt-0">
+            <div className="text-xs md:text-sm font-medium">
               {footerContent.developer}{" "}
-              <span className="text-[10px] sm:text-xs">© {currentYear}</span>
+              <span className="text-[10px] md:text-xs">© {currentYear}</span>
             </div>
             <div className="flex items-center gap-3">
               {footerContent.socialLinks.map(
@@ -58,7 +58,7 @@ export default function Footer() {
                       className="text-muted-foreground hover:text-foreground transition-colors"
                       title={link.name}
                     >
-                      <IconComponent className="h-4 w-4 sm:h-5 sm:w-5" />
+                      <IconComponent className="h-4 w-4 md:h-5 md:w-5" />
                     </Link>
                   );
                 }

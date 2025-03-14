@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chuck Norris Jokes
 
-## Getting Started
+Uma aplicação web moderna para buscar e exibir piadas do Chuck Norris utilizando a API [ChuckNorris.io](https://api.chucknorris.io/).
 
-First, run the development server:
+![Chuck Norris Jokes App](public/screenshot.png)
 
+## 🚀 Funcionalidades
+
+- **Busca de piadas** por termo ou palavra-chave
+- Botão **"I'm feeling lucky"** para exibir uma piada aleatória
+- **Destaque dos termos de busca** nos resultados (configurável)
+- **Histórico de buscas** para acessar facilmente pesquisas anteriores
+- **Favoritos** para salvar suas piadas preferidas
+- **Compartilhamento** de piadas (usando Web Share API quando disponível)
+- **Tema claro/escuro** para melhor experiência visual
+- **Design responsivo** para desktop e dispositivos móveis
+- Suporte para dispositivos com alta densidade de pixels
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Next.js 15** - Framework React com App Router
+- **React 18** - Biblioteca para construção de interfaces
+- **TypeScript** - Superset tipado de JavaScript
+- **TailwindCSS** - Framework CSS utilitário
+- **Framer Motion** - Biblioteca de animações
+- **React Query** - Gerenciamento de estado e cache para dados assíncronos
+- **Radix UI** - Componentes acessíveis e sem estilo
+- **Jest** - Framework de testes
+
+## 📋 Pré-requisitos
+
+- Node.js 18.17.0 ou superior
+- npm, yarn, pnpm ou bun
+
+## 🔧 Instalação
+
+1. Clone o repositório:
+```bash
+git clone https://github.com/seu-usuario/chuck-norris-jokes.git
+cd chuck-norris-jokes
+```
+
+2. Instale as dependências:
+```bash
+npm install
+# ou
+yarn install
+# ou
+pnpm install
+# ou
+bun install
+```
+
+3. Inicie o servidor de desenvolvimento:
 ```bash
 npm run dev
-# or
+# ou
 yarn dev
-# or
+# ou
 pnpm dev
-# or
+# ou
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Abra [http://localhost:3000](http://localhost:3000) no seu navegador para ver o resultado.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🧪 Testes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Execute os testes automatizados com:
 
-## Learn More
+```bash
+npm test
+# ou
+yarn test
+# ou
+pnpm test
+# ou
+bun test
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 🏗️ Estrutura do Projeto
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+chuck-norris-jokes/
+├── app/                  # Rotas e páginas da aplicação
+├── components/           # Componentes reutilizáveis
+├── hooks/                # Hooks personalizados
+├── lib/                  # Funções utilitárias e API
+├── public/               # Arquivos estáticos
+├── styles/               # Estilos globais
+├── tests/                # Testes automatizados
+└── types/                # Definições de tipos TypeScript
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📱 Recursos de Acessibilidade
 
-## Deploy on Vercel
+- Design responsivo para todos os tamanhos de tela
+- Suporte a temas claro/escuro
+- HTML semântico para melhor acessibilidade
+- Navegação por teclado
+- Feedback visual e textual para ações
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🌐 Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+A aplicação pode ser facilmente implantada na [Vercel](https://vercel.com) ou qualquer outra plataforma que suporte Next.js.
+
+```bash
+npm run build
+# ou
+yarn build
+# ou
+pnpm build
+# ou
+bun build
+```
+
+## 📄 Licença
+
+Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
+
+## 👨‍💻 Autor
+
+Seu Nome - [GitHub](https://github.com/seu-usuario) - [LinkedIn](https://linkedin.com/in/seu-usuario)

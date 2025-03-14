@@ -103,7 +103,7 @@ export default function JokeCard({
     >
       <Card className="overflow-hidden relative">
         <CardContent className="pt-6">
-          <div className="flex items-start gap-4">
+          <div className="flex flex-col sm:flex-row items-start gap-4">
             {joke.icon_url && (
               <motion.img
                 whileHover={{ rotate: [-5, 5, -5, 5, 0] }}
@@ -113,13 +113,13 @@ export default function JokeCard({
                   jokeCardContent.accessibility?.chuckNorrisImage ||
                   "Chuck Norris image"
                 }
-                className="w-12 h-12 object-contain"
+                className="w-12 h-12 object-contain mb-2 sm:mb-0"
                 loading="lazy"
               />
             )}
-            <div className="flex-1">
+            <div className="flex-1 w-full">
               <div className="relative group">
-                <p className="text-lg">
+                <p className="text-base sm:text-lg break-words">
                   {highlightedParts.map((part, index) =>
                     part.isHighlighted ? (
                       <motion.span
@@ -153,9 +153,9 @@ export default function JokeCard({
             </div>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-between pt-2 pb-4">
+        <CardFooter className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pt-2 pb-4">
           <RatingStars rating={rating} onChange={onRatingChange} />
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {showRemoveButton && onRemove && (
               <Button
                 variant="ghost"
@@ -164,7 +164,7 @@ export default function JokeCard({
                 className="text-destructive hover:text-destructive hover:bg-destructive/10"
               >
                 <Trash className="h-4 w-4 mr-1" />
-                <span>{jokeCardContent.removeFromFavorites}</span>
+                <span className="text-sm">{jokeCardContent.removeFromFavorites}</span>
               </Button>
             )}
             <ShareMenu joke={joke} />
@@ -172,7 +172,7 @@ export default function JokeCard({
         </CardFooter>
 
         {/* Badge de Top para piadas bem avaliadas */}
-        <TopBadge show={rating > 3} />
+        <TopBadge show={rating > 4} />
       </Card>
     </motion.div>
   );

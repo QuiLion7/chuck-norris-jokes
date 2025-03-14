@@ -21,6 +21,8 @@ import AboutModal from "./about-modal";
 export default function JokesApp() {
   const [isRandomJokeModalOpen, setIsRandomJokeModalOpen] = useState(false);
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
+  const [currentSearchTerm, setCurrentSearchTerm] = useState("");
+  const [highlightSearchTerm, setHighlightSearchTerm] = useState(true);
 
   const [ratedJokes, setRatedJokes] = useLocalStorage<JokeWithRating[]>(
     "rated-jokes",
@@ -35,6 +37,21 @@ export default function JokesApp() {
 
   // Garantir que isShareAvailable seja sempre um booleano
   const canShare = !!isShareAvailable;
+
+  // Manipulador para abrir o modal de piada aleatória
+  const handleOpenRandomJokeModal = useCallback(() => {
+    setIsRandomJokeModalOpen(true);
+  }, []);
+
+  // Manipulador para pesquisa
+  const handleSearch = useCallback((term: string) => {
+    setCurrentSearchTerm(term);
+  }, []);
+
+  // Manipulador para alteração de highlight
+  const handleHighlightChange = useCallback((highlight: boolean) => {
+    setHighlightSearchTerm(highlight);
+  }, []);
 
   // Manipulador para fechar o modal de piada aleatória
   const handleCloseRandomJokeModal = () => {
@@ -188,26 +205,33 @@ export default function JokesApp() {
     isRandomJokeModalOpen && randomJoke !== null;
 
   return (
-    <div className="flex flex-col bg-background overflow-x-hidden mt-16">
+    <div className="flex flex-col bg-background overflow-hidden min-h-screen">
       <BackgroundElements />
 
       <Header setIsAboutModalOpen={setIsAboutModalOpen} />
 
-      <div className="flex-grow relative">
-        <main className="container mx-auto max-w-4xl px-4 py-6 sm:py-8 relative z-10">
+      <div className="flex-grow mt-16 relative">
+        <main className="container mx-auto max-w-4xl px-2 sm:px-4 py-4 sm:py-8 relative z-10">
           {/* Título e formulário de pesquisa */}
-          <SearchForm />
+          <SearchForm 
+            onOpenRandomJokeModal={handleOpenRandomJokeModal}
+            onSearch={handleSearch}
+            onHighlightChange={handleHighlightChange}
+          />
 
           {/* Container de abas */}
           <TabsContainer>
             {/* Aba de resultados de pesquisa */}
-            <SearchTab />
+            <SearchTab 
+              currentSearchTerm={currentSearchTerm} 
+              highlightSearchTerm={highlightSearchTerm}
+            />
 
             {/* Aba de favoritos */}
             <FavoritesTab />
 
             {/* Aba de histórico */}
-            <HistoryTab />
+            <HistoryTab onSearchFromHistory={handleSearch} />
           </TabsContainer>
         </main>
 

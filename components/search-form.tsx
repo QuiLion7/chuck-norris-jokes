@@ -15,17 +15,26 @@ import {
 } from "@/components/ui/popover";
 import { searchFormContent } from "@/lib/content";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchJokes, fetchRandomJoke } from "@/lib/api";
 import { toast } from "sonner";
 import { HistoryItem } from "@/types/jokes";
 
-export default function SearchForm() {
+interface SearchFormProps {
+  onOpenRandomJokeModal: () => void;
+  onSearch?: (term: string) => void;
+  onHighlightChange?: (highlight: boolean) => void;
+}
+
+export default function SearchForm({ 
+  onOpenRandomJokeModal, 
+  onSearch, 
+  onHighlightChange 
+}: SearchFormProps) {
   const [searchTerm, setSearchTerm] = useState("");
-  const setLastSearchTerm = useState("")[1];
-  const setSearchResultsCategoryFilter = useState("all")[1];
-  const setIsRandomJokeModalOpen = useState(false)[1];
   const [highlightSearch, setHighlightSearch] = useState(true);
+
+  const queryClient = useQueryClient();
 
   const searchInputRef = useRef<HTMLInputElement>(
     null
@@ -47,11 +56,20 @@ export default function SearchForm() {
 
   // Função para buscar piada aleatória
   const handleRandomJoke = useCallback(async () => {
-    const result = await refetchRandomJoke();
-    if (result.data) {
-      setIsRandomJokeModalOpen(true);
+    try {
+      const result = await refetchRandomJoke();
+      if (result.data) {
+        // Atualiza o estado global com a piada aleatória
+        queryClient.setQueryData(["randomJoke"], result.data);
+
+        // Chama a função de callback passada como prop
+        onOpenRandomJokeModal();
+      }
+    } catch (error) {
+      console.error("Error fetching random joke:", error);
+      toast.error("Failed to fetch random joke. Please try again.");
     }
-  }, [refetchRandomJoke, setIsRandomJokeModalOpen]);
+  }, [refetchRandomJoke, queryClient, onOpenRandomJokeModal]);
 
   const [searchHistory, setSearchHistory] = useLocalStorage<HistoryItem[]>(
     "search-history",
@@ -92,8 +110,11 @@ export default function SearchForm() {
       if (e) e.preventDefault();
 
       if (searchTerm.trim().length >= 3) {
-        setLastSearchTerm(searchTerm.trim());
-        setSearchResultsCategoryFilter("all"); // Reset do filtro de categoria
+        // Chamar a função de callback passada como prop
+        if (onSearch) {
+          onSearch(searchTerm.trim());
+        }
+        
         await performSearch();
 
         // Mostrar toast de sucesso
@@ -103,7 +124,7 @@ export default function SearchForm() {
         });
       }
     },
-    [searchTerm, performSearch]
+    [searchTerm, performSearch, onSearch]
   );
 
   const handleSearchWithHistory = async (e?: React.FormEvent) => {
@@ -166,7 +187,7 @@ export default function SearchForm() {
               }`}
             />
           </div>
-          <div className="flex gap-2">
+          <div className="flex justify-center sm:justify-start gap-2">
             <Button
               type="submit"
               className="flex items-center gap-2"
@@ -224,7 +245,12 @@ export default function SearchForm() {
                     <Switch
                       id="highlight-search"
                       checked={highlightSearch}
-                      onCheckedChange={setHighlightSearch}
+                      onCheckedChange={(checked) => {
+                        setHighlightSearch(checked);
+                        if (onHighlightChange) {
+                          onHighlightChange(checked);
+                        }
+                      }}
                     />
                   </div>
                 </div>

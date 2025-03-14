@@ -307,19 +307,20 @@ export default function FavoritesTab() {
                   {favoritesTabContent.allRatings}
                 </SelectItem>
                 <SelectItem value="5">
-                  ⭐⭐⭐⭐⭐ (5 {favoritesTabContent.stars})
+
+                😂😂😂😂😂 (5 {favoritesTabContent.stars})
                 </SelectItem>
                 <SelectItem value="4">
-                  ⭐⭐⭐⭐ (4 {favoritesTabContent.stars})
+                😄😄😄😄 (4 {favoritesTabContent.stars})
                 </SelectItem>
                 <SelectItem value="3">
-                  ⭐⭐⭐ (3 {favoritesTabContent.stars})
+                😊😊😊 (3 {favoritesTabContent.stars})
                 </SelectItem>
                 <SelectItem value="2">
-                  ⭐⭐ (2 {favoritesTabContent.stars})
+                🙂🙂 (2 {favoritesTabContent.stars})
                 </SelectItem>
                 <SelectItem value="1">
-                  ⭐ (1 {favoritesTabContent.star})
+                😐 (1 {favoritesTabContent.star})
                 </SelectItem>
               </SelectContent>
             </Select>

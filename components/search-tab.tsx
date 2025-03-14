@@ -14,19 +14,30 @@ import {
 } from "@/components/ui/select";
 import { searchTabContent } from "@/lib/content";
 import { Joke, JokeWithRating } from "@/types/jokes";
-import { useCallback, useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchJokes } from "@/lib/api";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { toast } from "sonner";
 import JokeCard from "./joke-card";
 
-export default function SearchTab() {
-  const lastSearchTerm = useState("")[0];
-  const searchTerm = useState("")[0];
-  const highlightSearch = useState(true)[0];
+interface SearchTabProps {
+  currentSearchTerm: string;
+  highlightSearchTerm: boolean;
+}
+
+interface SearchResponse {
+  total: number;
+  result: Joke[];
+}
+
+export default function SearchTab({ currentSearchTerm, highlightSearchTerm }: SearchTabProps) {
+  const [lastSearchTerm, setLastSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [searchResultsCategoryFilter, setSearchResultsCategoryFilter] =
     useState("all");
+  
+  const queryClient = useQueryClient();
 
   const isShareAvailable: boolean =
     typeof navigator !== "undefined" &&
@@ -43,14 +54,33 @@ export default function SearchTab() {
 
   // Query para buscar piadas
   const {
-    data: searchResults,
+    data: searchResults = { total: 0, result: [] },
     isLoading,
     isFetching,
-  } = useQuery({
+  } = useQuery<SearchResponse>({
     queryKey: ["jokes", searchTerm],
     queryFn: () => fetchJokes(searchTerm),
-    enabled: false, // Não executa automaticamente
+    enabled: searchTerm.length >= 3, 
+    staleTime: 1000 * 60 * 5, // Mantém os resultados "frescos" por 5 minutos
+    gcTime: 1000 * 60 * 10, // Mantém os resultados em cache por 10 minutos
   });
+
+  // Escuta por mudanças no termo de pesquisa recebido via props
+  useEffect(() => {
+    if (currentSearchTerm && currentSearchTerm.length >= 3) {
+      setSearchTerm(currentSearchTerm);
+      setLastSearchTerm(currentSearchTerm);
+    }
+  }, [currentSearchTerm]);
+
+  // Efeito para atualizar o termo de pesquisa quando os dados da query mudam
+  useEffect(() => {
+    const currentData = queryClient.getQueryData(["jokes", searchTerm]);
+    if (currentData) {
+      // Se temos dados, atualizamos o último termo de pesquisa
+      setLastSearchTerm(searchTerm);
+    }
+  }, [queryClient, searchTerm, searchResults]);
 
   // Função para compartilhar conteúdo
   const shareContent = useCallback(
@@ -76,31 +106,18 @@ export default function SearchTab() {
   );
 
   // Função para copiar texto para a área de transferência
-  const copyToClipboard = useCallback(
-    async (text: string): Promise<boolean> => {
-      // Verifica se a API Clipboard está disponível
-      if (navigator.clipboard && window.isSecureContext) {
-        try {
-          await navigator.clipboard.writeText(text);
-          return true;
-        } catch (error) {
-          console.error("Erro ao copiar para a área de transferência:", error);
-          return false;
-        }
-      } else {
-        // Fallback para navegadores que não suportam a API Clipboard
-        // Nota: Este método não manipula diretamente o DOM
-        console.warn(
-          "API Clipboard não disponível. Usando método alternativo."
-        );
-        return false;
-      }
-    },
-    []
-  );
+  const copyToClipboard = useCallback(async (text: string): Promise<boolean> => {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (error) {
+      console.error("Erro ao copiar para a área de transferência:", error);
+      return false;
+    }
+  }, []);
 
-  // Compartilhar piada usando a API Web Share ou fallback para clipboard
-  const shareJoke = useCallback(
+  // Função para compartilhar uma piada
+  const handleShare = useCallback(
     async (joke: Joke) => {
       // Tentar usar a API Web Share se disponível
       if (canShare) {
@@ -127,16 +144,17 @@ export default function SearchTab() {
     [canShare, shareContent, copyToClipboard]
   );
 
-  // Atualizar avaliação de uma piada
-  const updateJokeRating = useCallback(
+  // Função para adicionar uma piada aos favoritos
+  const handleRatingChange = useCallback(
     (joke: Joke, rating: number) => {
-      const existingIndex = ratedJokes.findIndex((j) => j.id === joke.id);
+      // Verificar se a piada já existe na lista de avaliadas
+      const existingJokeIndex = ratedJokes.findIndex((j) => j.id === joke.id);
 
-      if (existingIndex !== -1) {
+      if (existingJokeIndex !== -1) {
         // Atualizar piada existente sem alterar o timestamp
         const updatedJokes = [...ratedJokes];
-        updatedJokes[existingIndex] = {
-          ...updatedJokes[existingIndex],
+        updatedJokes[existingJokeIndex] = {
+          ...updatedJokes[existingJokeIndex],
           rating,
         };
         setRatedJokes(updatedJokes);
@@ -150,6 +168,9 @@ export default function SearchTab() {
     },
     [ratedJokes, setRatedJokes]
   );
+
+  // Removida a função filterJokesByCategory pois não é usada
+  // A filtragem já é feita diretamente no useMemo filteredSearchResults
 
   const searchStats = useMemo(() => {
     if (!searchResults?.result) return null;
@@ -206,8 +227,6 @@ export default function SearchTab() {
     }
   }, [searchResults, searchResultsCategoryFilter]);
 
-  //   const { ratedJokes, updateJokeRating, shareJoke } = useFavorites();
-
   const hasNoSearchTerm = !lastSearchTerm;
   const isLoadingResults = isLoading || isFetching;
   const hasSearchResults =
@@ -217,14 +236,6 @@ export default function SearchTab() {
   const getJokeRating = (joke: Joke): number => {
     const ratedJoke = ratedJokes.find((j) => j.id === joke.id);
     return ratedJoke ? ratedJoke.rating : 0;
-  };
-
-  const handleRatingChange = (joke: Joke, rating: number) => {
-    updateJokeRating(joke, rating);
-  };
-
-  const handleShare = (joke: Joke) => {
-    shareJoke(joke);
   };
 
   if (hasNoSearchTerm) {
@@ -353,7 +364,7 @@ export default function SearchTab() {
                   <JokeCard
                     joke={joke}
                     rating={rating}
-                    highlightTerm={highlightSearch ? searchTerm : ""}
+                    highlightTerm={highlightSearchTerm ? searchTerm : ""}
                     onRatingChange={(rating) =>
                       handleRatingChange(joke, rating)
                     }

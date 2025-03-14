@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Search, Star, History } from "lucide-react";
@@ -14,13 +14,22 @@ interface TabsContainerProps {
 }
 
 export default function TabsContainer({ children }: TabsContainerProps) {
-  const searchHistory = useLocalStorage<HistoryItem[]>("search-history", [])[0];
-  const ratedJokes = useLocalStorage<JokeWithRating[]>("rated-jokes", [])[0];
+  const [searchHistory] = useLocalStorage<HistoryItem[]>("search-history", []);
+  const [ratedJokes] = useLocalStorage<JokeWithRating[]>("rated-jokes", []);
+
+// Estado para contagens para garantir atualizações em tempo real
+  const [favoritesCount, setFavoritesCount] = useState(0);
+  const [historyCount, setHistoryCount] = useState(0);
 
   const [activeTab, setActiveTab] = useState("search");
+// Atualizar contagens sempre que os dados subjacentes forem alterados
+  useEffect(() => {
+    setFavoritesCount(ratedJokes.filter((j) => j.rating > 0).length);
+  }, [ratedJokes]);
 
-  const favoritesCount = ratedJokes.filter((j) => j.rating > 0).length;
-  const historyCount = searchHistory.length;
+  useEffect(() => {
+    setHistoryCount(searchHistory.length);
+  }, [searchHistory]);
 
   const childrenArray = React.Children.toArray(children);
   const searchTabContent = childrenArray[0];
@@ -33,22 +42,22 @@ export default function TabsContainer({ children }: TabsContainerProps) {
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-4">
       <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger value="search" className="flex items-center gap-2">
+        <TabsTrigger value="search" className="flex items-center gap-1 sm:gap-2">
           <Search className="h-4 w-4" />
-          <span>{tabsContainerContent.search}</span>
+          <span className="text-xs sm:text-sm">{tabsContainerContent.search}</span>
         </TabsTrigger>
-        <TabsTrigger value="favorites" className="flex items-center gap-2">
+        <TabsTrigger value="favorites" className="flex items-center gap-1 sm:gap-2">
           <Star className="h-4 w-4" />
-          <span>{tabsContainerContent.favorites}</span>
+          <span className="text-xs sm:text-sm">{tabsContainerContent.favorites}</span>
           {hasFavorites && (
             <Badge variant="secondary" className="ml-1">
               {favoritesCount}
             </Badge>
           )}
         </TabsTrigger>
-        <TabsTrigger value="history" className="flex items-center gap-2">
+        <TabsTrigger value="history" className="flex items-center gap-1 sm:gap-2">
           <History className="h-4 w-4" />
-          <span>{tabsContainerContent.history}</span>
+          <span className="text-xs sm:text-sm">{tabsContainerContent.history}</span>
           {hasHistory && (
             <Badge variant="secondary" className="ml-1">
               {historyCount}

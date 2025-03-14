@@ -8,8 +8,11 @@ import { useLocalStorage } from "@/hooks/use-local-storage";
 import { HistoryItem } from "@/types/jokes";
 import { useCallback, useRef } from "react";
 
-export default function HistoryTab() {
-  //   const { searchHistory, clearHistory, searchFromHistory, formatDate } = useUI()
+interface HistoryTabProps {
+  onSearchFromHistory?: (term: string) => void;
+}
+
+export default function HistoryTab({ onSearchFromHistory }: HistoryTabProps) {
   const [searchHistory, setSearchHistory] = useLocalStorage<HistoryItem[]>(
     "search-history",
     []
@@ -33,19 +36,16 @@ export default function HistoryTab() {
     setSearchHistory([]);
   }, [setSearchHistory]);
 
-  // History methods
   const searchFromHistory = useCallback((term: string) => {
-    // Vamos usar um evento personalizado para comunicação entre contextos
-    // Isso evita a dependência circular
     if (searchInputRef.current) {
       searchInputRef.current.value = term;
       searchInputRef.current.focus();
     }
 
-    // Disparar um evento personalizado que o contexto de piadas pode escutar
-    const event = new CustomEvent("searchFromHistory", { detail: { term } });
-    window.dispatchEvent(event);
-  }, []);
+    if (onSearchFromHistory) {
+      onSearchFromHistory(term);
+    }
+  }, [onSearchFromHistory]);
 
   return (
     <div className="mb-6">

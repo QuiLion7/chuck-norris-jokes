@@ -1,19 +1,14 @@
 export const headerContent = {
   title: "Jokes App",
   subtitle: "Find jokes to brighten your day",
-  about: "About the app",
-  toggleTheme: "Toggle theme",
+  about: "About",
+  toggleTheme: "Theme",
 };
 
 export const footerContent = {
   copyright: `© ${new Date().getFullYear()} Jokes App`,
   rights: "All rights reserved",
   disclaimer: "This application is for educational purposes only",
-  links: [
-    { text: "Terms of Use", href: "#" },
-    { text: "Privacy Policy", href: "#" },
-    { text: "Contact", href: "#" },
-  ],
   tagline: "Chuck Norris doesn't need a footer, but we added one anyway.",
   developer: "Developed by Quilion Oliveira",
   apiCredit: "Chuck Norris facts provided by the",

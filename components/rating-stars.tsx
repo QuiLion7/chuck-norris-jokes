@@ -31,7 +31,7 @@ export default function RatingStars({ rating, onChange }: RatingStarsProps) {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1 sm:gap-2">
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
@@ -50,7 +50,7 @@ export default function RatingStars({ rating, onChange }: RatingStarsProps) {
           >
             <span
               className={cn(
-                "text-2xl transition-opacity",
+                "text-xl sm:text-2xl transition-opacity",
                 isStarActive(star) ? "opacity-100" : "opacity-30"
               )}
             >

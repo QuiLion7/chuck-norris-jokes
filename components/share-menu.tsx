@@ -150,9 +150,9 @@ export default function ShareMenu({
   return (
     <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant={variant} size={size} className={cn(className)}>
+        <Button variant={variant} size={size} className={cn("whitespace-nowrap", className)}>
           <Share2 className="h-4 w-4 mr-1" />
-          <span>{shareMenuContent.shareButton}</span>
+          <span className="text-sm">{shareMenuContent.shareButton}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
