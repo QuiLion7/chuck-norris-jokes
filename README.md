@@ -1,20 +1,30 @@
-# Chuck Norris Jokes
+
+# 🤠 Chuck Norris Jokes
 
 Uma aplicação web moderna para buscar e exibir piadas do Chuck Norris utilizando a API [ChuckNorris.io](https://api.chucknorris.io/).
 
 ![Chuck Norris Jokes App](public/screenshot.png)
 
-## 🚀 Funcionalidades
+### 🌞 Preview do Projeto
 
-- **Busca de piadas** por termo ou palavra-chave
-- Botão **"I'm feeling lucky"** para exibir uma piada aleatória
-- **Destaque dos termos de busca** nos resultados (configurável)
-- **Histórico de buscas** para acessar facilmente pesquisas anteriores
-- **Favoritos** para salvar suas piadas preferidas
-- **Compartilhamento** de piadas (usando Web Share API quando disponível)
-- **Tema claro/escuro** para melhor experiência visual
-- **Design responsivo** para desktop e dispositivos móveis
-- Suporte para dispositivos com alta densidade de pixels
+![Preview do Projeto - Desktop](/public/image-app-1.png)
+
+![Preview do Projeto - Tablet](/public/image-app-2.png)
+
+![Preview do Projeto - Mobile](/public/image-app-3.png)
+
+
+## ✨ Funcionalidades
+
+- 🔍**Busca de piadas** por termo ou palavra-chave
+- 🎲**Botão** "I'm feeling lucky" para exibir uma piada aleatória
+- 🎨**Destaque dos termos de busca** nos resultados (configurável)
+- 📜**Histórico de buscas** para acessar facilmente pesquisas anteriores
+- ⭐**Favoritos** para salvar suas piadas preferidas
+- 📤**Compartilhamento** de piadas (usando Web Share API quando disponível)
+- 🌗**Tema claro/escuro** para melhor experiência visual
+- 📱**Design responsivo** para desktop e dispositivos móveis
+- 🎯**Suporte** para dispositivos com alta densidade de pixels
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -120,4 +130,7 @@ Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICE
 
 ## 👨‍💻 Autor
 
-Seu Nome - [GitHub](https://github.com/seu-usuario) - [LinkedIn](https://linkedin.com/in/seu-usuario)
+**Quilion Oliveira**
+
+- Github: [QuiLion7](https://github.com/QuiLion7)
+- LinkedIn: [quilion7](https://www.linkedin.com/in/quilion7/)
